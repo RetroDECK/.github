@@ -1,0 +1,108 @@
+name: "Build ${{ github.event.repository.name }}"
+
+on:
+  push:
+    branches:
+     - main
+     - retrodeck-main
+     - feat/*
+  workflow_dispatch:
+
+jobs:
+  Building_module:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Clone RetroDECK repo
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          fetch-depth: 1
+
+      - name: "Install dependencies"
+        run: "automation_tools/install_dependencies.sh"
+
+      - name: "Creating ${{ github.event.repository.name }} manifest"
+        run: "/bin/bash ${GITHUB_WORKSPACE}/automation_tools/update_${{ github.event.repository.name }}_manifest.sh"
+
+      - name: "[DEBUG] Outputting manifest"
+        run: cat net.retrodeck.${{ github.event.repository.name }}.yml
+
+      - name: "Build flatpak"
+        id: "flatpak-download"
+        run: |
+          git config --global protocol.file.allow always
+          flatpak-builder --user --force-clean \
+            --install-deps-from=flathub \
+            --install-deps-from=flathub-beta \
+            --repo=${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-repo \
+            "${GITHUB_WORKSPACE}"/${{ github.event.repository.name }}-build-dir \
+            net.retrodeck.${{ github.event.repository.name }}.yml
+
+      - name: "Exporting dir tree"
+        id: tree
+        run: tree -H ./ > ${GITHUB_WORKSPACE}/tree.html
+
+      - name: Create Artifact for ${{ github.event.repository.name }}
+        run: | 
+          tar -czf ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-build-dir .
+          hash=($(sha256sum ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact.tar.gz))
+          echo $hash > ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact-cooker.sha
+          mv -f ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact-cooker.* ${{ secrets.ARTIFACT_REPO }}
+        continue-on-error: true
+        timeout-minutes: 1440
+
+      - name: Set environment variable with current branch name
+        run: echo "GITHUB_REF_SLUG=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Get branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=$(echo $GITHUB_REF | sed 's|refs/heads/||')" >> $GITHUB_ENV
+
+      - name: Get date
+        id: date
+        run: echo "DATE=$(date +'%d%m%y.%S')" >> $GITHUB_ENV
+
+      - name: Publish the artifacts in a release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "${{env.BRANCH_NAME}}-${{env.DATE}}"
+          body: |
+            # Release Notes
+            These are the artifact of ${{ github.event.repository.name }}, commit: ${{ github.event.repository.full_name }}@${{github.sha}}.
+            On branch [${{env.BRANCH_NAME}}](https://github.com/RetroDECK/${{ github.event.repository.name }}/tree/${{env.BRANCH_NAME}}).
+
+          artifacts: "${{ github.event.repository.name }}-Artifact.tar.gz, tree.html"
+          allowUpdates: true
+          makeLatest: ${{ contains(env.BRANCH_NAME, 'feat/') && 'false' || 'true' }}
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+        continue-on-error: true
+
+      - name: Clone Cooker repo
+        uses: actions/checkout@v3
+        with:
+          repository: RetroDECK/Cooker
+          submodules: 'true'
+          token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
+          path: "${GITHUB_WORKSPACE}/cooker"
+          fetch-depth: 1
+
+      - name: "Update RetroDECK Cooker manifest with new artifact URL and SHA256"
+        if: contains(env.BRANCH_NAME, 'feat/') == false
+        run: |
+          NEW_URL="https://github.com/RetroDECK/${{ github.event.repository.name }}/releases/download/${{env.BRANCH_NAME}}-${{env.DATE}}/RetroDECK-${{ github.event.repository.name }}-Artifact.tar.gz"
+          NEW_SHA256=$(cat ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact-cooker.sha)
+
+          yq e -i '.modules[] | select(.name == "${{ github.event.repository.name }}") | .sources[0].url = strenv(NEW_URL)' cooker/net.retrodeck.retrodeck.yml
+          yq e -i '.modules[] | select(.name == "${{ github.event.repository.name }}") | .sources[0].sha256 = strenv(NEW_SHA256)' cooker/net.retrodeck.retrodeck.yml
+
+      - name: Commit and push changes to Cooker repo
+        if: contains(env.BRANCH_NAME, 'feat/') == false
+        run: |
+          cd "${GITHUB_WORKSPACE}/cooker"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add net.retrodeck.retrodeck.yml
+          git commit -m "${{ github.event.repository.name }}: updated module with new artifact URL and SHA256"
+          git push origin HEAD
