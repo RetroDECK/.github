@@ -9,14 +9,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  Building_module:
+  Building_${{ github.event.repository.name }}:
     runs-on: ubuntu-latest
     steps:
 
       - name: Clone RetroDECK repo
         uses: actions/checkout@v3
         with:
-          submodules: 'true'
+          submodules: 'recursive'
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
           fetch-depth: 1
 
@@ -44,7 +44,7 @@ jobs:
         id: tree
         run: tree -H ./ > ${GITHUB_WORKSPACE}/tree.html
 
-      - name: Create Artifact for ${{ github.event.repository.name }}
+      - name: Create Artifact for RetroDECK
         run: | 
           tar -czf ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact.tar.gz -C ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-build-dir .
           hash=($(sha256sum ${GITHUB_WORKSPACE}/${{ github.event.repository.name }}-Artifact.tar.gz))
@@ -80,14 +80,14 @@ jobs:
         continue-on-error: true
 
       - name: Clone Cooker repo
+        if: contains(env.BRANCH_NAME, 'feat/') == false
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/RetroDECK/RetroDECK
+          repository: RetroDECK/RetroDECK
           ref: cooker
-          submodules: 'true'
+          submodules: 'recursive'
           token: ${{ secrets.TRIGGER_BUILD_TOKEN }}
-          path: "${GITHUB_WORKSPACE}/cooker"
-          fetch-depth: 1
+          path: cooker
 
       - name: "Update RetroDECK Cooker manifest with new artifact URL and SHA256"
         if: contains(env.BRANCH_NAME, 'feat/') == false
