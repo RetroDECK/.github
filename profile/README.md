@@ -30,8 +30,9 @@ Instead of having several different emulators, game engines, other systems and f
 
 RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) with the goal to provide everything you need for retro gaming right out of the box. With the `RetroDECK Framework`, `RetroDECK RetroENGINE` and `RetroDECK Configurator` it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.
 
-## Our repositories:
+## Links 
 
+### Our repositories:
 
 | Name                                                                                   | Description                                           |
 |----------------------------------------------------------------------------------------|-------------------------------------------------------|
@@ -43,3 +44,27 @@ RetroDECK is an all-in-one retro gaming platform with built-in emulators, game e
 | [RetroDECK/RetroDECK-theme](https://github.com/RetroDECK/RetroDECK-theme)              | Theme Repo: RetroDECK's ES-DE Theme                   |
 | [flathub/net.retrodeck.retrodeck](https://github.com/flathub/net.retrodeck.retrodeck)  | Flathub Repo: net.retrodeck.retrodeck                 |
 | [RetroDECK/repositories](https://github.com/orgs/RetroDECK/repositories)               | Full Org Repo : All other repos in RetroDECK          |
+
+---
+
+### Community Links 
+
+| Name                    | Description                                            |
+|-------------------------|------------------------------------------------|
+| [RetroDECK Blog](https://retrodeck.readthedocs.io/en/latest/blog/)   | The RetroDECK Blog |
+| [RetroDECK Wiki](https://retrodeck.readthedocs.io/en/latest/)      | RetroDECK Wiki   |
+| [Bluesky](https://bsky.app/profile/retrodeck.net) | RetroDECK Bluesky|
+| [Discord](https://discord.gg/WDc5C9YWMx)    |  RetroDECK Discord Server    |
+| [Matrix](https://matrix.to/#/#retrodeck:matrix.org) | RetroDECK Matrix Server |
+| [Lemmy](https://lemmy.zip/c/retrodeck)         | RetroDECK Lemmy Community |
+| [Revolt](https://rvlt.gg/StVaEc0w)              | RetroDECK Revolt Server |
+
+---
+
+### Services Links 
+
+| Name                    | Link                                            |
+|-------------------------|------------------------------------------------|
+| [Github: Service](https://www.githubstatus.com/)     |  Github Service Status   |
+| [Flathub: Service](https://status.flathub.org/)      |  Flathub Service Status    |
+| [Flathub: Buildbot](https://buildbot.flathub.org/#/apps/net.retrodeck.retrodeck) | Flathub RetroDECK Builtbot |
