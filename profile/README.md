@@ -10,7 +10,11 @@
 ![GitHub](https://img.shields.io/github/license/RetroDECK/RetroDECK)
 [![Documentation Status](https://readthedocs.org/projects/retrodeck/badge/?version=latest)](https://retrodeck.readthedocs.io/en/latest/?badge=latest)
 
-Instead of having several different emulators, game engines, other systems and frontends on your Linux/SteamOS system you only need one: **RetroDECK**.
+## What is RetroDECK?
+
+RetroDECK is a powerful all-in-one retro gaming platform designed for handheld gaming PCs like the Steam Deck, full Linux desktops, Linux HTPC setups, and Linux-based PC consoles such as the Steam Machine. Delivered as a self-contained Flatpak app, it gives you everything you need for retro gaming right out of the box, no manual setup required. By integrating a wide range of components such as emulators, game engines, ports, and built-in tools, RetroDECK brings all your favorite games together in one streamlined, easy-to-use package.
+
+---
 
 <p float="center">
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen01.jpeg?raw=true" alt="screenshot" width="150"/>
@@ -24,11 +28,7 @@ Instead of having several different emulators, game engines, other systems and f
 <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/screenshots/screen06.jpeg?raw=true" alt="screenshot" width="150"/>
 </p>
 
----
 
-## What is RetroDECK?
-
-RetroDECK is an all-in-one retro gaming platform with built-in emulators, game engines, and systems. It's perfect for devices like the Steam Deck or Linux Desktop. It is a self-contained [Flatpak application](https://flathub.org/apps/net.retrodeck.retrodeck) with the goal to provide everything you need for retro gaming right out of the box. With the `RetroDECK Framework`, `RetroDECK RetroENGINE` and `RetroDECK Configurator` it integrates and manage various emulators, game engines and other software, allowing you to play your favorite retro games in one complete package.
 
 ## Links 
 
@@ -58,7 +58,7 @@ RetroDECK is an all-in-one retro gaming platform with built-in emulators, game e
 | [Discord](https://discord.gg/WDc5C9YWMx)    |  RetroDECK Discord Server    |
 | [Matrix](https://matrix.to/#/#retrodeck:matrix.org) | RetroDECK Matrix Server |
 | [Lemmy](https://lemmy.zip/c/retrodeck)         | RetroDECK Lemmy Community |
-| [Revolt](https://rvlt.gg/StVaEc0w)              | RetroDECK Revolt Server |
+| [Stoat](https://rvlt.gg/StVaEc0w)              | RetroDECK Revolt Server |
 
 ---
 
