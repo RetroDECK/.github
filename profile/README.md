@@ -1,8 +1,6 @@
 <p float="center">
-    <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="600"/>
+    <img src="https://github.com/RetroDECK/RetroDECK/blob/main/res/logo.png?raw=true" alt="RetroDECK logo" width="550"/>
 </p>
-
-# RetroDECK on your device!
 
 ![Flathub](https://img.shields.io/flathub/downloads/net.retrodeck.retrodeck)
 ![Flathub](https://img.shields.io/flathub/v/net.retrodeck.retrodeck)
